@@ -6,25 +6,35 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// Middleware
-app.use(express.json());
+// Allowed frontend origins
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'https://deployproj.vercel.app',
+  'https://deployproj-git-master-baldevoli.vercel.app',
+  'https://deployproj-copy-production.up.railway.app'
+];
+
+// CORS middleware with dynamic origin check
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:3001',
-    'https://*.ngrok-free.app',
-    'https://deployproj.vercel.app',
-    'https://deployproj-git-master-baldevoli.vercel.app'
-  ],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Role']
 }));
 
+// Middleware
+app.use(express.json());
+
 // Health check endpoint
 app.get('/api/health', async (req, res) => {
   try {
-    // Test database connection
     await pool.query('SELECT 1');
     res.json({
       status: 'healthy',
@@ -67,11 +77,8 @@ app.use((err, req, res, next) => {
 // Start server
 async function startServer() {
   try {
-    // Test database connection
     await testConnection();
     console.log('Database connection successful');
-    
-    // Start listening
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
