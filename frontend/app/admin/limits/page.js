@@ -89,7 +89,7 @@ export default function LimitsPage() {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'X-Role': 'admin'
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         credentials: 'include',
         body: JSON.stringify({

@@ -59,17 +59,17 @@ exports.getVendorItems = async (req, res) => {
   
   try {
     // First check if the vendor exists
-    const [vendorRows] = await db.query('SELECT * FROM vendors WHERE vendor_id = ?', [vendorId]);
+    const vendorRows = await db.query('SELECT * FROM vendors WHERE vendor_id = $1', [vendorId]);
     
-    if (!vendorRows[0]) {
+    if (!vendorRows.rows[0]) {
       return res.status(404).json({ error: 'Vendor not found' });
     }
     
     // Vendor exists, now fetch associated items
-    const [itemRows] = await db.query('SELECT * FROM items WHERE vendor_id = ?', [vendorId]);
+    const itemRows = await db.query('SELECT * FROM items WHERE vendor_id = $1', [vendorId]);
     
-    console.log(`Retrieved ${itemRows.length} items for vendor ${vendorId}`);
-    res.json(itemRows);
+    console.log(`Retrieved ${itemRows.rows.length} items for vendor ${vendorId}`);
+    res.json(itemRows.rows);
   } catch (err) {
     console.error('Error fetching vendor items:', err);
     res.status(500).json({ error: 'Database error', details: err.message });
