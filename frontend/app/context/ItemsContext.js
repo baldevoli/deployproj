@@ -33,7 +33,7 @@ export const ItemsProvider = ({ children }) => {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-        mode: 'cors',
+        credentials: 'include',
         signal: controller.signal,
       });
       
