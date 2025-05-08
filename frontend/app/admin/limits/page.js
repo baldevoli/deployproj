@@ -17,7 +17,7 @@ export default function LimitsPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   // Use environment variable for API URL
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_URL_DEV;
 
   useEffect(() => {
     fetchItems();
