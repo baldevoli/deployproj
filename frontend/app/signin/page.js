@@ -26,6 +26,9 @@ export default function SignIn() {
   // State to track loading status during authentication
   const [isLoading, setIsLoading] = useState(false);
 
+  // Use environment variable for API URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_URL_DEV;
+
   // Effect to hide navbar on the sign-in page
   useEffect(() => {
     document.body.classList.add('hide-navbar');
@@ -97,7 +100,7 @@ export default function SignIn() {
     
     try {
       // Fetch user data from the backend API
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users?email=${encodeURIComponent(email)}`);
+      const response = await fetch(`${API_URL}/api/users?email=${encodeURIComponent(email)}`);
       
       if (!response.ok) {
         throw new Error('Failed to connect to authentication service');

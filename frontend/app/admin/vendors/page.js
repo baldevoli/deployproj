@@ -35,8 +35,8 @@ export default function AdminVendors() {
     address: ''
   });
 
-  // API URL
-  const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+  // Use environment variable for API URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_URL_DEV;
 
   // Check authentication and admin role
   useEffect(() => {

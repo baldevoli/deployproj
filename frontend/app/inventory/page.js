@@ -25,6 +25,9 @@ export default function Inventory() {
   const [checkoutError, setCheckoutError] = useState('');
   const [checkoutSuccess, setCheckoutSuccess] = useState('');
 
+  // Use environment variable for API URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_URL_DEV;
+
   // Filter items that have stock and match search criteria
   const filteredItems = items.filter(({ type, product_name, description, order_quantity, weight_amount }) => {
     const hasNoStock = (order_quantity === null || order_quantity === 0) && 
@@ -141,7 +144,7 @@ export default function Inventory() {
         }
 
         // Update item stock in backend
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/items/${productId}/update-quantity`, {
+        const response = await fetch(`${API_URL}/api/items/${productId}/update-quantity`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
@@ -156,7 +159,7 @@ export default function Inventory() {
         }
 
         // Record the transaction
-        const transactionResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/transactions`, {
+        const transactionResponse = await fetch(`${API_URL}/api/transactions`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
