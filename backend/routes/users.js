@@ -14,6 +14,7 @@ router.delete('/:id', controller.remove);
 // Authentication routes
 router.post('/signup', controller.create);
 router.post('/login', controller.login);
+router.post('/admin/signup', controller.createAdmin);
 
 // Print all routes for debugging
 console.log('User routes configured:', 

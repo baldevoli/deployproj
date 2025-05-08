@@ -6,9 +6,11 @@ import styles from '@/styles/AdminDashboard.module.css';
 import { useRouter } from 'next/navigation';
 import { useVendors } from '../../context/VendorsContext';
 import { useItems } from '../../context/ItemsContext';
+import { useAuth } from '../../context/AuthContext';
 
 export default function AdminDashboard() {
   const router = useRouter();
+  const { user } = useAuth();
   const { vendors, loading: vendorsLoading, error: vendorsError } = useVendors();
   const { items, loading: itemsLoading, error: itemsError } = useItems();
   const [mostTakenItems, setMostTakenItems] = useState([]);
@@ -21,6 +23,13 @@ export default function AdminDashboard() {
   const [error, setError] = useState(null);
   const [showAlertSettings, setShowAlertSettings] = useState(false);
   
+  // Check if user is admin
+  useEffect(() => {
+    if (!user || user.role !== 'admin') {
+      router.push('/');
+    }
+  }, [user, router]);
+
   // Initialize alert settings from localStorage or use defaults
   const [alertSettings, setAlertSettings] = useState(() => {
     if (typeof window !== 'undefined') {

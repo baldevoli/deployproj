@@ -171,3 +171,77 @@ exports.remove = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// Create admin user
+exports.createAdmin = async (req, res) => {
+  console.log('Create admin user called with data:', req.body);
+  
+  // Validate required fields
+  const requiredFields = ['first_name', 'last_name', 'email', 'password'];
+  for (const field of requiredFields) {
+    if (!req.body[field]) {
+      console.log(`Missing required field: ${field}`);
+      return res.status(400).json({ error: `${field.replace('_', ' ')} is required` });
+    }
+  }
+
+  try {
+    // Copy the request body
+    const userData = {...req.body};
+    console.log('User data after copy:', userData);
+    
+    // Generate custom user ID from first and last name
+    userData.user_id = generateUserId(userData.first_name, userData.last_name);
+    // Set role to admin
+    userData.role = 'admin';
+    // Set status to active
+    userData.status = 'active';
+    
+    console.log('Final admin user data with ID:', userData);
+    
+    // Insert admin user with the generated ID
+    const result = await db.query('INSERT INTO users SET ?', userData);
+    console.log('Admin user successfully created:', result);
+    res.status(201).json({ 
+      message: 'Admin user registered',
+      user_id: userData.user_id
+    });
+  } catch (err) {
+    console.error('Database error during admin user creation:', err);
+    
+    // Handle specific MySQL errors
+    if (err.code === 'ER_DUP_ENTRY') {
+      if (err.sqlMessage.includes('email')) {
+        console.log('Duplicate email error');
+        return res.status(409).json({ error: 'Email already registered' });
+      } else {
+        console.log('Duplicate user ID error');
+        // Try a different ID
+        userData.user_id = generateUserId(userData.first_name, userData.last_name) + Math.floor(Math.random() * 10);
+        console.log('Generated alternative ID:', userData.user_id);
+        
+        try {
+          // Try again with new ID
+          const result2 = await db.query('INSERT INTO users SET ?', userData);
+          console.log('Second attempt successful:', result2);
+          return res.status(201).json({ 
+            message: 'Admin user registered',
+            user_id: userData.user_id
+          });
+        } catch (err2) {
+          console.error('Second attempt failed:', err2);
+          return res.status(500).json({ 
+            error: 'Database error during registration',
+            details: err2.message
+          });
+        }
+      }
+    }
+    
+    return res.status(500).json({ 
+      error: 'Database error during registration',
+      details: err.message,
+      code: err.code
+    });
+  }
+};
