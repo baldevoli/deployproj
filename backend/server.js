@@ -9,20 +9,35 @@ const PORT = process.env.PORT || 8000;
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: '*',  // Allow all origins in production
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'https://*.ngrok-free.app',
+    'https://deployproj.vercel.app',
+    'https://deployproj-git-master-baldevoli.vercel.app'
+  ],
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Role']
 }));
 
 // Health check endpoint
 app.get('/api/health', async (req, res) => {
   try {
-    await testConnection();
-    res.status(200).json({ status: 'ok', message: '✅ Healthcheck OK - Server and database are running' });
+    // Test database connection
+    await pool.query('SELECT 1');
+    res.json({
+      status: 'healthy',
+      database: 'connected',
+      timestamp: new Date().toISOString()
+    });
   } catch (error) {
     console.error('Health check failed:', error);
-    res.status(500).json({ status: 'error', message: error.message });
+    res.status(500).json({
+      status: 'unhealthy',
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
   }
 });
 
