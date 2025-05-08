@@ -7,6 +7,11 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+
+  // Disable CSS optimization
+  experimental: {
+    optimizeCss: false,
+  },
   
   // Configure allowed development origins
   async headers() {
