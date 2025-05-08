@@ -3,8 +3,6 @@ const router = express.Router();
 const controller = require('../controllers/vendorsController');
 const authorizeAdmin = require('../middleware/authorizeAdmin');
 
-
-
 // Public routes - No authorization required
 router.get('/', controller.getAll);
 router.get('/:id', controller.getOne);
