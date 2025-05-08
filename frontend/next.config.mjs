@@ -12,6 +12,9 @@ const nextConfig = {
   experimental: {
     optimizeCss: false,
   },
+
+  // Configure trailing slashes for static export
+  trailingSlash: true,
   
   // Configure allowed development origins
   async headers() {
