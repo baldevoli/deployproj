@@ -44,7 +44,15 @@ async function testConnection() {
 
 // Export query function and pool
 module.exports = {
-  query: (...args) => pool.query(...args),
+  query: async (sql, params) => {
+    try {
+      const [rows] = await pool.query(sql, params);
+      return rows;
+    } catch (error) {
+      console.error('Database query error:', error);
+      throw error;
+    }
+  },
   pool,
   testConnection
 };

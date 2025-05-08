@@ -17,7 +17,7 @@ const generateUserId = (firstName, lastName) => {
 
 exports.getAll = async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM users');
+    const rows = await db.query('SELECT * FROM users');
     res.json(rows);
   } catch (err) {
     console.error('Error fetching users:', err);
@@ -27,7 +27,7 @@ exports.getAll = async (req, res) => {
 
 exports.getOne = async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM users WHERE user_id = ?', [req.params.id]);
+    const rows = await db.query('SELECT * FROM users WHERE user_id = ?', [req.params.id]);
     if (!rows[0]) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -51,7 +51,7 @@ exports.login = async (req, res) => {
   
   try {
     // Query the database for the user
-    const [rows] = await db.query(
+    const rows = await db.query(
       'SELECT * FROM users WHERE email = ? AND password = ?', 
       [email, password]
     );
@@ -100,7 +100,7 @@ exports.create = async (req, res) => {
     console.log('Final user data with ID:', userData);
     
     // Insert user with the generated ID
-    const [result] = await db.query('INSERT INTO users SET ?', userData);
+    const result = await db.query('INSERT INTO users SET ?', userData);
     console.log('User successfully created:', result);
     res.status(201).json({ 
       message: 'User registered',
@@ -122,7 +122,7 @@ exports.create = async (req, res) => {
         
         try {
           // Try again with new ID
-          const [result2] = await db.query('INSERT INTO users SET ?', userData);
+          const result2 = await db.query('INSERT INTO users SET ?', userData);
           console.log('Second attempt successful:', result2);
           return res.status(201).json({ 
             message: 'User registered',
@@ -148,7 +148,7 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
-    const [result] = await db.query('UPDATE users SET ? WHERE user_id = ?', [req.body, req.params.id]);
+    const result = await db.query('UPDATE users SET ? WHERE user_id = ?', [req.body, req.params.id]);
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -161,7 +161,7 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
   try {
-    const [result] = await db.query('DELETE FROM users WHERE user_id = ?', [req.params.id]);
+    const result = await db.query('DELETE FROM users WHERE user_id = ?', [req.params.id]);
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'User not found' });
     }

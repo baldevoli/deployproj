@@ -7,12 +7,12 @@ exports.getAll = async (req, res) => {
   try {
     if (vendorId) {
       console.log(`Fetching items for vendor ID: ${vendorId}`);
-      const [rows] = await db.query('SELECT * FROM items WHERE vendor_id = ?', [vendorId]);
+      const rows = await db.query('SELECT * FROM items WHERE vendor_id = ?', [vendorId]);
       console.log(`Found ${rows.length} items for vendor ID ${vendorId}`);
       res.json(rows);
     } else {
       // No filter, get all items
-      const [rows] = await db.query('SELECT * FROM items');
+      const rows = await db.query('SELECT * FROM items');
       console.log(`Retrieved all ${rows.length} items`);
       res.json(rows);
     }
@@ -24,7 +24,7 @@ exports.getAll = async (req, res) => {
 
 exports.getOne = async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM items WHERE product_id = ?', [req.params.id]);
+    const rows = await db.query('SELECT * FROM items WHERE product_id = ?', [req.params.id]);
     if (!rows[0]) {
       return res.status(404).json({ error: 'Item not found' });
     }
@@ -84,7 +84,7 @@ exports.create = async (req, res) => {
   console.log('Attempting to insert item with data:', itemData);
   
   try {
-    const [result] = await db.query('INSERT INTO items SET ?', itemData);
+    const result = await db.query('INSERT INTO items SET ?', itemData);
     console.log('Item created successfully with ID:', result.insertId);
     res.status(201).json({ 
       message: 'Item created successfully',
@@ -99,7 +99,7 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
-    const [result] = await db.query('UPDATE items SET ? WHERE product_id = ?', [req.body, req.params.id]);
+    const result = await db.query('UPDATE items SET ? WHERE product_id = ?', [req.body, req.params.id]);
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Item not found' });
     }
@@ -112,7 +112,7 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
   try {
-    const [result] = await db.query('DELETE FROM items WHERE product_id = ?', [req.params.id]);
+    const result = await db.query('DELETE FROM items WHERE product_id = ?', [req.params.id]);
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Item not found' });
     }
@@ -137,7 +137,7 @@ exports.updateQuantity = async (req, res) => {
   
   try {
     // First, get the current item to check available quantity/weight
-    const [rows] = await db.query('SELECT * FROM items WHERE product_id = ?', [product_id]);
+    const rows = await db.query('SELECT * FROM items WHERE product_id = ?', [product_id]);
     
     if (rows.length === 0) {
       return res.status(404).json({ error: 'Item not found' });
@@ -187,7 +187,7 @@ exports.updateQuantity = async (req, res) => {
     const sql = `UPDATE items SET ${updateFields} WHERE product_id = ?`;
     console.log('Executing SQL query:', sql, 'with values:', updateValues);
     
-    const [result] = await db.query(sql, updateValues);
+    const result = await db.query(sql, updateValues);
     
     res.json({ 
       message: 'Item updated successfully',
@@ -240,7 +240,7 @@ exports.getLowStock = async (req, res) => {
       END ASC`;
 
   try {
-    const [rows] = await db.query(query, [weightThreshold, quantityThreshold, weightThreshold, quantityThreshold]);
+    const rows = await db.query(query, [weightThreshold, quantityThreshold, weightThreshold, quantityThreshold]);
     res.json(Array.isArray(rows) ? rows : []);
   } catch (err) {
     console.error('Error fetching low stock items:', err);
@@ -275,7 +275,7 @@ exports.updateGlobalLimits = async (req, res) => {
   console.log('Executing SQL query:', sql, 'with values:', updateValues);
 
   try {
-    const [result] = await db.query(sql, updateValues);
+    const result = await db.query(sql, updateValues);
     console.log('Global limits update result:', result);
     res.json({ 
       message: 'Global limits updated successfully',

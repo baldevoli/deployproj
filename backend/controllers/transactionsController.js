@@ -11,7 +11,7 @@ exports.getAll = async (req, res) => {
   `;
 
   try {
-    const [rows] = await db.query(query);
+    const rows = await db.query(query);
     res.json(rows);
   } catch (err) {
     console.error('Error fetching transactions:', err);
@@ -30,7 +30,7 @@ exports.getByUser = async (req, res) => {
   `;
 
   try {
-    const [rows] = await db.query(query, [req.params.user_id]);
+    const rows = await db.query(query, [req.params.user_id]);
     res.json(rows);
   } catch (err) {
     console.error('Error fetching user transactions:', err);
@@ -50,7 +50,7 @@ exports.create = async (req, res) => {
 
   try {
     // Step 1: Look up the user from the database
-    const [userResults] = await db.query('SELECT status FROM users WHERE user_id = ?', [user_id]);
+    const userResults = await db.query('SELECT status FROM users WHERE user_id = ?', [user_id]);
     
     if (userResults.length === 0) {
       console.error('User lookup failed: User not found');
@@ -76,7 +76,7 @@ exports.create = async (req, res) => {
       user_id, product_id, quantity_taken, user_status
     });
 
-    const [result] = await db.query(insertQuery, [user_id, product_id, quantity_taken, user_status]);
+    const result = await db.query(insertQuery, [user_id, product_id, quantity_taken, user_status]);
 
     res.status(201).json({
       message: 'Transaction created successfully',
@@ -113,7 +113,7 @@ exports.getMostTaken = async (req, res) => {
 
   console.log('Fetching most taken items...');
   try {
-    const [rows] = await db.query(query);
+    const rows = await db.query(query);
     console.log('Most taken items result:', rows);
     res.json(rows);
   } catch (err) {
@@ -133,7 +133,7 @@ exports.getUniqueStudentCounts = async (req, res) => {
   `;
 
   try {
-    const [rows] = await db.query(query);
+    const rows = await db.query(query);
 
     const counts = {
       undergraduate_count: 0,
