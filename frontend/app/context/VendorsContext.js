@@ -37,6 +37,7 @@ export const VendorsProvider = ({ children }) => {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         credentials: 'include',
         signal: controller.signal,
@@ -52,17 +53,17 @@ export const VendorsProvider = ({ children }) => {
       
       // Parse the JSON response
       const data = await res.json();
-      console.log('Vendors fetched successfully:', data.length);
+      console.log('Vendors fetched successfully:', data);
       
-      // Transform the data to ensure backward compatibility with the 'name' field
-      const transformedData = data.map(vendor => ({
+      // Ensure data is an array before mapping
+      const vendorsData = Array.isArray(data) ? data : [];
+      const transformedVendors = vendorsData.map(vendor => ({
         ...vendor,
-        // Keep both name and vendor_name fields for compatibility
         name: vendor.vendor_name
       }));
       
       // Update state with the fetched vendors
-      setVendors(transformedData);
+      setVendors(transformedVendors);
     } catch (err) {
       console.error('Error fetching vendors:', err);
       // Special handling for timeout errors

@@ -14,7 +14,7 @@ const db = require('../db');
  */
 exports.getAll = async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM vendors');
+    const rows = await db.query('SELECT * FROM vendors');
     console.log(`Retrieved ${rows.length} vendors`);
     res.json(rows);
   } catch (err) {
