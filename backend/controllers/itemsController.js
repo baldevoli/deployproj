@@ -1,40 +1,41 @@
 const db = require('../db');
 
-exports.getAll = (req, res) => {
+exports.getAll = async (req, res) => {
   // Check if there's a vendor_id filter
   const vendorId = req.query.vendor_id;
   
-  if (vendorId) {
-    console.log(`Fetching items for vendor ID: ${vendorId}`);
-    db.query('SELECT * FROM items WHERE vendor_id = ?', [vendorId], (err, rows) => {
-      if (err) {
-        console.error('Error fetching vendor items:', err);
-        return res.status(500).json({ error: 'Database error', details: err.message });
-      }
+  try {
+    if (vendorId) {
+      console.log(`Fetching items for vendor ID: ${vendorId}`);
+      const [rows] = await db.query('SELECT * FROM items WHERE vendor_id = ?', [vendorId]);
       console.log(`Found ${rows.length} items for vendor ID ${vendorId}`);
       res.json(rows);
-    });
-  } else {
-    // No filter, get all items
-    db.query('SELECT * FROM items', (err, rows) => {
-      if (err) {
-        console.error('Error fetching all items:', err);
-        return res.status(500).json({ error: 'Database error', details: err.message });
-      }
+    } else {
+      // No filter, get all items
+      const [rows] = await db.query('SELECT * FROM items');
       console.log(`Retrieved all ${rows.length} items`);
       res.json(rows);
-    });
+    }
+  } catch (err) {
+    console.error('Error fetching items:', err);
+    res.status(500).json({ error: 'Database error', details: err.message });
   }
 };
 
-exports.getOne = (req, res) => {
-  db.query('SELECT * FROM items WHERE product_id = ?', [req.params.id], (err, rows) => {
-    if (err) return res.status(500).json({ error: err });
+exports.getOne = async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM items WHERE product_id = ?', [req.params.id]);
+    if (!rows[0]) {
+      return res.status(404).json({ error: 'Item not found' });
+    }
     res.json(rows[0]);
-  });
+  } catch (err) {
+    console.error('Error fetching item:', err);
+    res.status(500).json({ error: err });
+  }
 };
 
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   console.log('Creating new item with data:', req.body);
   
   // Validate required fields
@@ -82,35 +83,47 @@ exports.create = (req, res) => {
   
   console.log('Attempting to insert item with data:', itemData);
   
-  db.query('INSERT INTO items SET ?', itemData, (err, result) => {
-    if (err) {
-      console.error('Error inserting item:', err);
-      return res.status(500).json({ error: 'Database error', details: err.message });
-    }
+  try {
+    const [result] = await db.query('INSERT INTO items SET ?', itemData);
     console.log('Item created successfully with ID:', result.insertId);
     res.status(201).json({ 
       message: 'Item created successfully',
       id: result.insertId,
       item: itemData
     });
-  });
+  } catch (err) {
+    console.error('Error inserting item:', err);
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
 };
 
-exports.update = (req, res) => {
-  db.query('UPDATE items SET ? WHERE product_id = ?', [req.body, req.params.id], (err) => {
-    if (err) return res.status(500).json({ error: err });
+exports.update = async (req, res) => {
+  try {
+    const [result] = await db.query('UPDATE items SET ? WHERE product_id = ?', [req.body, req.params.id]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Item not found' });
+    }
     res.json({ message: 'Item updated' });
-  });
+  } catch (err) {
+    console.error('Error updating item:', err);
+    res.status(500).json({ error: err });
+  }
 };
 
-exports.remove = (req, res) => {
-  db.query('DELETE FROM items WHERE product_id = ?', [req.params.id], (err) => {
-    if (err) return res.status(500).json({ error: err });
+exports.remove = async (req, res) => {
+  try {
+    const [result] = await db.query('DELETE FROM items WHERE product_id = ?', [req.params.id]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Item not found' });
+    }
     res.json({ message: 'Item deleted' });
-  });
+  } catch (err) {
+    console.error('Error deleting item:', err);
+    res.status(500).json({ error: err });
+  }
 };
 
-exports.updateQuantity = (req, res) => {
+exports.updateQuantity = async (req, res) => {
   const { product_id, quantity, weight } = req.body;
   
   // Validate input
@@ -122,12 +135,9 @@ exports.updateQuantity = (req, res) => {
     return res.status(400).json({ error: 'Either quantity or weight must be provided' });
   }
   
-  // First, get the current item to check available quantity/weight
-  db.query('SELECT * FROM items WHERE product_id = ?', [product_id], (err, rows) => {
-    if (err) {
-      console.error('Error fetching item:', err);
-      return res.status(500).json({ error: 'Database error', details: err.message });
-    }
+  try {
+    // First, get the current item to check available quantity/weight
+    const [rows] = await db.query('SELECT * FROM items WHERE product_id = ?', [product_id]);
     
     if (rows.length === 0) {
       return res.status(404).json({ error: 'Item not found' });
@@ -177,22 +187,20 @@ exports.updateQuantity = (req, res) => {
     const sql = `UPDATE items SET ${updateFields} WHERE product_id = ?`;
     console.log('Executing SQL query:', sql, 'with values:', updateValues);
     
-    db.query(sql, updateValues, (err) => {
-      if (err) {
-        console.error('Error updating item:', err);
-        return res.status(500).json({ error: 'Database error', details: err.message });
-      }
-      
-      res.json({ 
-        message: 'Item updated successfully',
-        updatedItem: { ...item, ...updateData }
-      });
+    const [result] = await db.query(sql, updateValues);
+    
+    res.json({ 
+      message: 'Item updated successfully',
+      updatedItem: { ...item, ...updateData }
     });
-  });
+  } catch (err) {
+    console.error('Error updating item:', err);
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
 };
 
 // Get low stock items
-exports.getLowStock = (req, res) => {
+exports.getLowStock = async (req, res) => {
   // Get thresholds from query parameters, default to 5 for quantity and 10 for weight
   const quantityThreshold = parseInt(req.query.quantity) || 5;
   const weightThreshold = parseFloat(req.query.weight) || 10;
@@ -231,18 +239,17 @@ exports.getLowStock = (req, res) => {
         ELSE order_quantity / ?
       END ASC`;
 
-  db.query(query, [weightThreshold, quantityThreshold, weightThreshold, quantityThreshold], (err, rows) => {
-    if (err) {
-      console.error('Error fetching low stock items:', err);
-      return res.status(500).json({ error: 'Failed to fetch low stock items' });
-    }
-    
+  try {
+    const [rows] = await db.query(query, [weightThreshold, quantityThreshold, weightThreshold, quantityThreshold]);
     res.json(Array.isArray(rows) ? rows : []);
-  });
+  } catch (err) {
+    console.error('Error fetching low stock items:', err);
+    res.status(500).json({ error: 'Failed to fetch low stock items' });
+  }
 };
 
 // Update global limits for all items
-exports.updateGlobalLimits = (req, res) => {
+exports.updateGlobalLimits = async (req, res) => {
   const { quantity, weight } = req.body;
   console.log('Received global limits update request:', { quantity, weight });
 
@@ -267,17 +274,15 @@ exports.updateGlobalLimits = (req, res) => {
   const sql = `UPDATE items SET ${updateFields.join(', ')}`;
   console.log('Executing SQL query:', sql, 'with values:', updateValues);
 
-  // Update all items
-  db.query(sql, updateValues, (err, result) => {
-    if (err) {
-      console.error('Error updating global limits:', err);
-      return res.status(500).json({ error: 'Failed to update global limits', details: err.message });
-    }
-
+  try {
+    const [result] = await db.query(sql, updateValues);
     console.log('Global limits update result:', result);
     res.json({ 
       message: 'Global limits updated successfully',
       affectedRows: result.affectedRows
     });
-  });
+  } catch (err) {
+    console.error('Error updating global limits:', err);
+    res.status(500).json({ error: 'Failed to update global limits', details: err.message });
+  }
 };
