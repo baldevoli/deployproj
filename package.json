@@ -1,8 +1,17 @@
 {
+  "name": "retriever-essentials",
+  "version": "1.0.0",
+  "description": "Retriever Essentials Inventory Management System",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "build": "cd frontend && npm run build"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
-    "lucide-react": "^0.503.0",
-    "next": "15.2.4",
-    "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "concurrently": "^8.2.2"
   }
 }

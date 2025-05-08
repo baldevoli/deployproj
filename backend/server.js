@@ -102,6 +102,18 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
+const db = require('./db');
+
+// Test database connection
+db.getConnection((err, connection) => {
+  if (err) {
+    console.error('Error connecting to the database:', err);
+    return;
+  }
+  console.log('Successfully connected to the database');
+  connection.release();
+});
+
 app.listen(PORT, () => {
-  console.log(`Server listening at http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
