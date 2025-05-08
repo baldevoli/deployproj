@@ -64,7 +64,16 @@ console.log('Routes registered successfully');
 
 // Health check endpoint
 app.get('/', (req, res) => {
-  res.send('🎉 API is up and running');
+  console.log('Health check hit /');
+  // Test database connection
+  db.getConnection((err, connection) => {
+    if (err) {
+      console.error('Database connection error during health check:', err);
+      return res.status(500).json({ error: 'Database connection failed' });
+    }
+    connection.release();
+    res.status(200).send('🎉 API is up and running');
+  });
 });
 
 // Add a debug endpoint to test API connectivity
@@ -104,16 +113,17 @@ app.use((req, res) => {
 
 const db = require('./db');
 
-// Test database connection
+// Test database connection before starting server
 db.getConnection((err, connection) => {
   if (err) {
     console.error('Error connecting to the database:', err);
-    return;
+    process.exit(1); // Exit if database connection fails
   }
   console.log('Successfully connected to the database');
   connection.release();
-});
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  
+  // Start server only after successful database connection
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
 });
