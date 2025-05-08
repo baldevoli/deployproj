@@ -12,15 +12,15 @@ const db = require('../db');
  * Retrieves a list of all vendors from the database.
  * No filtering or pagination is applied.
  */
-exports.getAll = (req, res) => {
-  db.query('SELECT * FROM vendors', (err, rows) => {
-    if (err) {
-      console.error('Error fetching vendors:', err);
-      return res.status(500).json({ error: 'Database error', details: err.message });
-    }
+exports.getAll = async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM vendors');
     console.log(`Retrieved ${rows.length} vendors`);
     res.json(rows);
-  });
+  } catch (err) {
+    console.error('Error fetching vendors:', err);
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
 };
 
 /**
@@ -29,22 +29,22 @@ exports.getAll = (req, res) => {
  * Retrieves detailed information for a specific vendor.
  * Returns 404 if the vendor doesn't exist.
  */
-exports.getOne = (req, res) => {
+exports.getOne = async (req, res) => {
   const vendorId = req.params.id;
   console.log(`Fetching vendor with ID: ${vendorId}`);
   
-  db.query('SELECT * FROM vendors WHERE vendor_id = ?', [vendorId], (err, rows) => {
-    if (err) {
-      console.error('Error fetching vendor:', err);
-      return res.status(500).json({ error: 'Database error', details: err.message });
-    }
+  try {
+    const [rows] = await db.query('SELECT * FROM vendors WHERE vendor_id = ?', [vendorId]);
     
     if (!rows[0]) {
       return res.status(404).json({ error: 'Vendor not found' });
     }
     
     res.json(rows[0]);
-  });
+  } catch (err) {
+    console.error('Error fetching vendor:', err);
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
 };
 
 /**
@@ -53,32 +53,27 @@ exports.getOne = (req, res) => {
  * Retrieves a list of all items associated with a given vendor ID.
  * Returns 404 if the vendor doesn't exist.
  */
-exports.getVendorItems = (req, res) => {
+exports.getVendorItems = async (req, res) => {
   const vendorId = req.params.id;
   console.log(`Fetching items for vendor with ID: ${vendorId}`);
   
-  // First check if the vendor exists
-  db.query('SELECT * FROM vendors WHERE vendor_id = ?', [vendorId], (err, vendorRows) => {
-    if (err) {
-      console.error('Error checking vendor existence:', err);
-      return res.status(500).json({ error: 'Database error', details: err.message });
-    }
+  try {
+    // First check if the vendor exists
+    const [vendorRows] = await db.query('SELECT * FROM vendors WHERE vendor_id = ?', [vendorId]);
     
     if (!vendorRows[0]) {
       return res.status(404).json({ error: 'Vendor not found' });
     }
     
     // Vendor exists, now fetch associated items
-    db.query('SELECT * FROM items WHERE vendor_id = ?', [vendorId], (err, itemRows) => {
-      if (err) {
-        console.error('Error fetching vendor items:', err);
-        return res.status(500).json({ error: 'Database error', details: err.message });
-      }
-      
-      console.log(`Retrieved ${itemRows.length} items for vendor ${vendorId}`);
-      res.json(itemRows);
-    });
-  });
+    const [itemRows] = await db.query('SELECT * FROM items WHERE vendor_id = ?', [vendorId]);
+    
+    console.log(`Retrieved ${itemRows.length} items for vendor ${vendorId}`);
+    res.json(itemRows);
+  } catch (err) {
+    console.error('Error fetching vendor items:', err);
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
 };
 
 /**
@@ -89,7 +84,7 @@ exports.getVendorItems = (req, res) => {
  * Other fields (contact_person, address, phone, email) are optional.
  * Returns the newly created vendor's ID and data upon success.
  */
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   console.log('Creating new vendor with data:', req.body);
   
   // Validate required fields
@@ -111,11 +106,8 @@ exports.create = (req, res) => {
   
   console.log('Processed vendor data for insertion:', vendorData);
   
-  db.query('INSERT INTO vendors SET ?', vendorData, (err, result) => {
-    if (err) {
-      console.error('Error creating vendor:', err);
-      return res.status(500).json({ error: err });
-    }
+  try {
+    const [result] = await db.query('INSERT INTO vendors SET ?', vendorData);
     
     console.log('Vendor created successfully with ID:', result.insertId);
     res.status(201).json({ 
@@ -123,7 +115,10 @@ exports.create = (req, res) => {
       id: result.insertId,
       vendor: vendorData
     });
-  });
+  } catch (err) {
+    console.error('Error creating vendor:', err);
+    res.status(500).json({ error: err });
+  }
 };
 
 /**
@@ -133,7 +128,7 @@ exports.create = (req, res) => {
  * Requires at minimum a vendor_name.
  * Returns 404 if the vendor doesn't exist.
  */
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
   const vendorId = req.params.id;
   console.log(`Updating vendor with ID: ${vendorId}, data:`, req.body);
   
@@ -156,11 +151,8 @@ exports.update = (req, res) => {
   
   console.log('Processed vendor data for update:', vendorData);
   
-  db.query('UPDATE vendors SET ? WHERE vendor_id = ?', [vendorData, vendorId], (err, result) => {
-    if (err) {
-      console.error('Error updating vendor:', err);
-      return res.status(500).json({ error: err });
-    }
+  try {
+    const [result] = await db.query('UPDATE vendors SET ? WHERE vendor_id = ?', [vendorData, vendorId]);
     
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Vendor not found' });
@@ -168,7 +160,10 @@ exports.update = (req, res) => {
     
     console.log('Vendor updated successfully');
     res.json({ message: 'Vendor updated successfully' });
-  });
+  } catch (err) {
+    console.error('Error updating vendor:', err);
+    res.status(500).json({ error: err });
+  }
 };
 
 /**
@@ -179,16 +174,13 @@ exports.update = (req, res) => {
  * Returns 400 if the vendor has associated items.
  * Returns 404 if the vendor doesn't exist.
  */
-exports.remove = (req, res) => {
+exports.remove = async (req, res) => {
   const vendorId = req.params.id;
   console.log(`Deleting vendor with ID: ${vendorId}`);
   
-  // First, check if this vendor has any items
-  db.query('SELECT COUNT(*) as itemCount FROM items WHERE vendor_id = ?', [vendorId], (err, countResult) => {
-    if (err) {
-      console.error('Error checking for vendor items:', err);
-      return res.status(500).json({ error: 'Database error', details: err.message });
-    }
+  try {
+    // First, check if this vendor has any items
+    const [countResult] = await db.query('SELECT COUNT(*) as itemCount FROM items WHERE vendor_id = ?', [vendorId]);
     
     // If vendor has associated items, prevent deletion and return informative error
     if (countResult[0].itemCount > 0) {
@@ -199,28 +191,17 @@ exports.remove = (req, res) => {
       });
     }
     
-    // If no associated items, proceed with deletion
-    db.query('DELETE FROM vendors WHERE vendor_id = ?', [vendorId], (err, result) => {
-      if (err) {
-        console.error('Error deleting vendor:', err);
-        
-        // Check specifically for foreign key constraint errors
-        if (err.code === 'ER_ROW_IS_REFERENCED_2') {
-          return res.status(400).json({ 
-            error: 'Foreign key constraint error', 
-            message: 'This vendor cannot be deleted because it has associated items in the database.' 
-          });
-        }
-        
-        return res.status(500).json({ error: 'Database error', details: err.message });
-      }
-      
-      if (result.affectedRows === 0) {
-        return res.status(404).json({ error: 'Vendor not found' });
-      }
-      
-      console.log('Vendor deleted successfully');
-      res.json({ message: 'Vendor deleted successfully' });
-    });
-  });
+    // No items found, proceed with deletion
+    const [result] = await db.query('DELETE FROM vendors WHERE vendor_id = ?', [vendorId]);
+    
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Vendor not found' });
+    }
+    
+    console.log('Vendor deleted successfully');
+    res.json({ message: 'Vendor deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting vendor:', err);
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
 };
