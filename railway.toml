@@ -5,6 +5,4 @@ buildCommand = "chmod +x build.sh && ./build.sh"
 [deploy]
 startCommand = "cd backend && node server.js"
 healthcheckPath = "/api/health"
-healthcheckTimeout = 100
-restartPolicyType = "on-failure"
-restartPolicyMaxRetries = 10 
+healthcheckTimeout = 100 
