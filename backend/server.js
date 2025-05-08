@@ -13,7 +13,6 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'http://localhost:3001',
-    'https://*.ngrok-free.app',
     'https://47d2-2600-4040-b0d2-ee00-253c-b4ab-9699-f224.ngrok-free.app'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
