@@ -4,7 +4,7 @@ const { pool, testConnection } = require('./db');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8080;
 
 // Middleware
 app.use(express.json());

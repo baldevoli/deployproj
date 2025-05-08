@@ -31,7 +31,7 @@ export default function AdminDashboard() {
   });
 
   // Use environment variable for API URL
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -78,7 +78,7 @@ export default function AdminDashboard() {
     
     try {
       // Send request to update alert settings
-      const response = await fetch('http://localhost:8000/api/items/update-global-limits', {
+      const response = await fetch('http://localhost:8080/api/items/update-global-limits', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -34,7 +34,7 @@ export default function Signup() {
   const [userId, setUserId] = useState('');
 
   // Use environment variable for API URL
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
   // Effect to hide navbar on the signup page
   useEffect(() => {

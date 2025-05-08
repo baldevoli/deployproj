@@ -36,7 +36,7 @@ export default function AdminVendors() {
   });
 
   // API URL
-  const API_URL = 'http://localhost:8000';
+  const API_URL = 'http://localhost:8080';
 
   // Check authentication and admin role
   useEffect(() => {

@@ -32,7 +32,7 @@ export default function AdminAddItem() {
       setIsUpdateMode(true); // Set update mode when ID is in URL
       const fetchItemData = async () => {
         try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL_DEV || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/items/${itemId}`);
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL_DEV || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/api/items/${itemId}`);
           if (response.ok) {
             const existingItem = await response.json();
             setFormData({
@@ -80,7 +80,7 @@ export default function AdminAddItem() {
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   
   // Use environment variable for API URL
-  const API_URL = process.env.NEXT_PUBLIC_API_URL_DEV || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL_DEV || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
   // Fetch vendors on component mount
   useEffect(() => {
