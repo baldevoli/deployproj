@@ -1,21 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable static exports
-  output: 'export',
-  
-  // Disable server-side image optimization
+  // Enable image optimization
   images: {
-    unoptimized: true,
+    domains: ['localhost', '47d2-2600-4040-b0d2-ee00-253c-b4ab-9699-f224.ngrok-free.app'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.ngrok-free.app',
+      },
+    ],
   },
 
-  // Disable CSS optimization
-  experimental: {
-    optimizeCss: false,
-  },
-
-  // Configure trailing slashes for static export
-  trailingSlash: true,
-  
   // Configure allowed development origins
   async headers() {
     return [
