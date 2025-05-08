@@ -1,3 +1,4 @@
+// db.js
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
@@ -41,8 +42,9 @@ async function testConnection() {
   }
 }
 
-// Export the pool and test function
+// Export query function and pool
 module.exports = {
+  query: (...args) => pool.query(...args),
   pool,
   testConnection
 };
