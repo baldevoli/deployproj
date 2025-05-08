@@ -24,6 +24,11 @@ app.use((req, res, next) => {
   next();
 });
 
+// Health check endpoint
+app.get('/', (req, res) => {
+  res.status(200).send('🎉 API is up and running');
+});
+
 // API routes
 console.log('Registering API routes...');
 
@@ -41,20 +46,6 @@ app.use('/api/types', require('./routes/types'));
 
 console.log('Routes registered successfully');
 
-// Health check endpoint with database verification
-app.get('/', (req, res) => {
-  console.log('Health check hit /');
-  const pool = require('./db');
-  pool.getConnection((err, connection) => {
-    if (err) {
-      console.error('Database connection error during health check:', err);
-      return res.status(500).json({ error: 'Database connection failed' });
-    }
-    connection.release();
-    res.status(200).send('🎉 API is up and running');
-  });
-});
-
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Server error:', err);
@@ -70,18 +61,7 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
-// Test database connection before starting server
-const pool = require('./db');
-pool.getConnection((err, connection) => {
-  if (err) {
-    console.error('Error connecting to the database:', err);
-    process.exit(1); // Exit if database connection fails
-  }
-  console.log('Successfully connected to the database');
-  connection.release();
-  
-  // Start server only after successful database connection
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
