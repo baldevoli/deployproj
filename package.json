@@ -3,12 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "cd frontend && npm install && npm run build",
-    "start": "cd frontend && npm start",
+    "build": "cd frontend && npm install --no-package-lock && npm run build",
+    "start": "cd backend && node server.js",
     "dev": "cd frontend && npm run dev"
   },
   "dependencies": {
-    "lucide-react": "^0.503.0",
     "next": "15.2.4",
     "react": "19.1.0",
     "react-dom": "19.1.0"

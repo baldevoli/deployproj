@@ -1,6 +1,6 @@
 [build]
 builder = "nixpacks"
-buildCommand = "cd backend && npm install && cd ../frontend && npm install"
+buildCommand = "npm install --no-package-lock && cd backend && npm install --no-package-lock && cd ../frontend && npm install --no-package-lock"
 
 [deploy]
 startCommand = "cd backend && node server.js"
