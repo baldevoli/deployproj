@@ -8,8 +8,8 @@ export const ItemsProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Hard-code the API URL for testing
-  const API_URL = 'http://localhost:8000';
+  // Use environment variable for API URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL_DEV || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
   
   useEffect(() => {
     const fetchItems = async () => {

@@ -30,7 +30,7 @@ export default function AdminAddItem() {
       setIsUpdateMode(true); // Set update mode when ID is in URL
       const fetchItemData = async () => {
         try {
-          const response = await fetch(`http://localhost:8000/api/items/${itemId}`);
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL_DEV || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/items/${itemId}`);
           if (response.ok) {
             const existingItem = await response.json();
             setFormData({
@@ -78,11 +78,14 @@ export default function AdminAddItem() {
   const [success, setSuccess] = useState('');
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   
+  // Use environment variable for API URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL_DEV || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
   // Fetch vendors on component mount
   useEffect(() => {
     const fetchVendors = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/vendors');
+        const response = await fetch(`${API_URL}/api/vendors`);
         if (!response.ok) {
           throw new Error('Failed to fetch vendors');
         }
@@ -115,7 +118,7 @@ export default function AdminAddItem() {
     if (name === 'product_id' && value.trim()) {
       try {
         console.log('Checking product ID:', value.trim());
-        const response = await fetch(`http://localhost:8000/api/items/${value.trim()}`);
+        const response = await fetch(`${API_URL}/api/items/${value.trim()}`);
         console.log('API Response:', response.status);
         
         let existingItem = null;
@@ -232,7 +235,7 @@ export default function AdminAddItem() {
         console.log('Sending item data to server:', itemData);
 
         // Check if item exists to determine if we should update or create
-        const checkResponse = await fetch(`http://localhost:8000/api/items/${itemData.product_id}`);
+        const checkResponse = await fetch(`${API_URL}/api/items/${itemData.product_id}`);
         let itemExists = false;
         let existingItemData = null;
         
@@ -274,8 +277,8 @@ export default function AdminAddItem() {
         // Send request to add/update item
         const response = await fetch(
           itemExists 
-            ? `http://localhost:8000/api/items/${itemData.product_id}`
-            : 'http://localhost:8000/api/items',
+            ? `${API_URL}/api/items/${itemData.product_id}`
+            : `${API_URL}/api/items`,
           {
             method: itemExists ? 'PUT' : 'POST',
             headers: {

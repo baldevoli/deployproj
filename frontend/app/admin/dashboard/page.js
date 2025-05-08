@@ -24,11 +24,14 @@ export default function AdminDashboard() {
     return { quantity: 5, weight: 10 };
   });
 
+  // Use environment variable for API URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL_DEV || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         // Fetch student counts
-        const studentCountsResponse = await fetch('http://localhost:8000/api/transactions/unique-students');
+        const studentCountsResponse = await fetch(`${API_URL}/api/transactions/unique-students`);
         if (!studentCountsResponse.ok) {
           throw new Error(`Failed to fetch student counts: ${studentCountsResponse.status}`);
         }
@@ -39,7 +42,7 @@ export default function AdminDashboard() {
         });
 
         // Fetch most taken items
-        const transactionsResponse = await fetch('http://localhost:8000/api/transactions/most-taken');
+        const transactionsResponse = await fetch(`${API_URL}/api/transactions/most-taken`);
         if (!transactionsResponse.ok) {
           throw new Error(`Failed to fetch most taken items: ${transactionsResponse.status}`);
         }
@@ -47,7 +50,7 @@ export default function AdminDashboard() {
         setMostTakenItems(Array.isArray(transactionsData) ? transactionsData : []);
 
         // Fetch low stock items
-        const itemsResponse = await fetch(`http://localhost:8000/api/items/low-stock?quantity=${alertSettings.quantity}&weight=${alertSettings.weight}`);
+        const itemsResponse = await fetch(`${API_URL}/api/items/low-stock?quantity=${alertSettings.quantity}&weight=${alertSettings.weight}`);
         if (!itemsResponse.ok) {
           throw new Error(`Failed to fetch low stock items: ${itemsResponse.status}`);
         }
