@@ -14,7 +14,7 @@ const db = require('../db');
  */
 exports.getAll = async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM vendors');
+    const rows = await db.query('SELECT * FROM vendors');
     console.log(`Retrieved ${rows.length} vendors`);
     res.json(rows);
   } catch (err) {
@@ -34,7 +34,7 @@ exports.getOne = async (req, res) => {
   console.log(`Fetching vendor with ID: ${vendorId}`);
   
   try {
-    const [rows] = await db.query('SELECT * FROM vendors WHERE vendor_id = ?', [vendorId]);
+    const rows = await db.query('SELECT * FROM vendors WHERE vendor_id = ?', [vendorId]);
     
     if (!rows[0]) {
       return res.status(404).json({ error: 'Vendor not found' });
@@ -59,14 +59,14 @@ exports.getVendorItems = async (req, res) => {
   
   try {
     // First check if the vendor exists
-    const [vendorRows] = await db.query('SELECT * FROM vendors WHERE vendor_id = ?', [vendorId]);
+    const vendorRows = await db.query('SELECT * FROM vendors WHERE vendor_id = ?', [vendorId]);
     
     if (!vendorRows[0]) {
       return res.status(404).json({ error: 'Vendor not found' });
     }
     
     // Vendor exists, now fetch associated items
-    const [itemRows] = await db.query('SELECT * FROM items WHERE vendor_id = ?', [vendorId]);
+    const itemRows = await db.query('SELECT * FROM items WHERE vendor_id = ?', [vendorId]);
     
     console.log(`Retrieved ${itemRows.length} items for vendor ${vendorId}`);
     res.json(itemRows);
@@ -107,7 +107,7 @@ exports.create = async (req, res) => {
   console.log('Processed vendor data for insertion:', vendorData);
   
   try {
-    const [result] = await db.query('INSERT INTO vendors SET ?', vendorData);
+    const result = await db.query('INSERT INTO vendors SET ?', vendorData);
     
     console.log('Vendor created successfully with ID:', result.insertId);
     res.status(201).json({ 
@@ -152,7 +152,7 @@ exports.update = async (req, res) => {
   console.log('Processed vendor data for update:', vendorData);
   
   try {
-    const [result] = await db.query('UPDATE vendors SET ? WHERE vendor_id = ?', [vendorData, vendorId]);
+    const result = await db.query('UPDATE vendors SET ? WHERE vendor_id = ?', [vendorData, vendorId]);
     
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Vendor not found' });
@@ -180,7 +180,7 @@ exports.remove = async (req, res) => {
   
   try {
     // First, check if this vendor has any items
-    const [countResult] = await db.query('SELECT COUNT(*) as itemCount FROM items WHERE vendor_id = ?', [vendorId]);
+    const countResult = await db.query('SELECT COUNT(*) as itemCount FROM items WHERE vendor_id = ?', [vendorId]);
     
     // If vendor has associated items, prevent deletion and return informative error
     if (countResult[0].itemCount > 0) {
@@ -192,7 +192,7 @@ exports.remove = async (req, res) => {
     }
     
     // No items found, proceed with deletion
-    const [result] = await db.query('DELETE FROM vendors WHERE vendor_id = ?', [vendorId]);
+    const result = await db.query('DELETE FROM vendors WHERE vendor_id = ?', [vendorId]);
     
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Vendor not found' });
