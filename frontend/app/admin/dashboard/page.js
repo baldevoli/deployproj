@@ -39,12 +39,16 @@ export default function AdminDashboard() {
     return { quantity: 5, weight: 10 };
   });
 
-  // Use environment variable for API URL
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  // Use environment variable for API URL with fallback
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_URL_DEV;
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
+        if (!API_URL) {
+          throw new Error('API URL is not configured. Please check your environment variables.');
+        }
+
         // Fetch student counts
         const studentCountsResponse = await fetch(`${API_URL}/api/transactions/unique-students`);
         if (!studentCountsResponse.ok) {
@@ -86,8 +90,12 @@ export default function AdminDashboard() {
     e.preventDefault();
     
     try {
+      if (!API_URL) {
+        throw new Error('API URL is not configured');
+      }
+
       // Send request to update alert settings
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/items/update-global-limits`, {
+      const response = await fetch(`${API_URL}/api/items/update-global-limits`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
