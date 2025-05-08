@@ -11,17 +11,21 @@ const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
   'https://deployproj.vercel.app',
-  'https://deployproj-git-master-baldevoli.vercel.app',
-  'https://deployproj-copy-production.up.railway.app',
+  'https://deployproj-git-master-baldevoli.vercel.app'
 ];
 
-// CORS middleware with dynamic origin check
+// CORS middleware with dynamic origin handling
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'https://deployproj-copy-production.up.railway.app'
-  ],
-  credentials: true
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS: ' + origin));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Middleware
