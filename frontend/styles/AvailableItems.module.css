@@ -1,0 +1,223 @@
+.hideNavbar .navbar {
+    display: none;
+  }
+  .maxQuantityBadge {
+    background-color: #ffe5e5;
+    color: #b00;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    display: inline-block;
+    margin-top: 8px;
+  }
+  
+  .priceRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  
+  .hideNavbar body {
+    margin-top: 0;
+    padding-top: 0;
+  }
+  
+  .availableItemsContainer {
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    padding-bottom: 2rem;
+    width: 100%;
+    overflow-x: hidden;
+    margin-top: 0 !important;
+  }
+  
+  .titleBanner {
+    background-color: #000;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .titleLink {
+    color: #ffcc00;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .titleLink:hover {
+    color: #ffed4a;
+  }
+  
+  .availableItemsContainer.no-navbar {
+    margin-top: 0;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+  }
+  
+  .loginBanner {
+    background-color: #000;
+    color: white;
+    padding: 0.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    flex-wrap: nowrap;
+  }
+  
+  .loginBanner p {
+    color: #ffcc00;
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-family: 'Playfair Display', serif;
+    margin: 0;
+    white-space: nowrap;
+  }
+  
+  .loginButton {
+    background-color: #ffcc00;
+    color: #000;
+    padding: 0.4rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    margin-left: 1rem;
+    white-space: nowrap;
+  }
+  
+  .loginButton:hover {
+    background-color: #ffed4a;
+  }
+  
+  .availableItemsContent {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  .availableItemsContent h2 {
+    text-align: center;
+    color: #000;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .itemsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .itemCard {
+    background: white;
+    border-radius: 9px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .itemCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .itemHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .itemCategory {
+    background-color: #ffcc00;
+    color: #000;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .itemQuantity {
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  .itemCard h3 {
+    color: #000;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .itemDescription {
+    color: #666;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+  
+  .itemFooter {
+    border-top: 1px solid #eee;
+    padding-top: 1rem;
+  }
+  
+  .dietaryInfo {
+    background-color: #f0f0f0;
+    color: #666;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+  }
+  
+  .loadingMessage {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+    color: #666;
+  }
+  
+  .errorMessage {
+    text-align: center;
+    padding: 1rem;
+    margin: 2rem auto;
+    max-width: 100%;
+    background-color: #dc3545;
+    color: white;
+    border-radius: 5px;
+    font-size: 1rem;
+    word-break: break-word;
+  }
+  
+  @media (max-width: 768px) {
+    .loginBanner {
+      flex-direction: row;
+      gap: 1rem;
+      padding: 0.5rem 1rem;
+      width: 100%;
+    }
+  
+    .loginBanner p {
+      font-size: 1rem;
+    }
+  
+    .availableItemsContent {
+      padding: 0 1rem;
+      width: 100%;
+    }
+  
+    .itemsGrid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+  

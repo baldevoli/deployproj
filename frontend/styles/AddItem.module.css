@@ -1,0 +1,183 @@
+.add-item-container {
+  min-height: calc(100vh - 64px);
+  background-color: #f5f5f5;
+  padding: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 65px;
+}
+
+.add-item-form-container {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 9px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 500px;
+  border: 3px solid #070707;
+}
+
+.add-item-form-container h2 {
+  text-align: center;
+  color: #000;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.add-item-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  color: #000;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Remove these rules since we're using spans for asterisks now */
+.form-group label::after {
+  content: none;
+}
+
+.form-group label:not([for="item_name"]):not([for="quantity"]):not([for="weight"])::after {
+  content: none;
+}
+
+/* Add styling for the required asterisk */
+
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  padding: 0.8rem;
+  border: 1px solid #000;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #ffcc00;
+  box-shadow: 0 0 0 2px rgba(255, 204, 0, 0.2);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.success-message {
+  background-color: #28a745;
+  color: white;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.error-message {
+  background-color: #dc3545;
+  color: white;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.submit-button, .cancel-button {
+  flex: 1 1 auto;
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+  min-width: 0; /* allow to shrink on small screens */
+}
+
+
+.submit-button:hover {
+  background-color: #45a049;
+}
+
+.cancel-button {
+  background-color: #f44336;
+  margin-left: 10px;
+}
+
+.cancel-button:hover {
+  background-color: #da190b;
+}
+
+/* Add a container for the buttons */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Input type number styling - using class selector instead of pure input selector */
+.number-input {
+  -moz-appearance: textfield;
+}
+
+.number-input::-webkit-outer-spin-button,
+.number-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
+}
+
+@media (max-width: 768px) {
+  .add-item-container {
+    padding: 1rem;
+  }
+
+  .add-item-form-container {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 9px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 100%; /* full width of parent */
+    max-width: 500px;
+    border: 3px solid #070707;
+    box-sizing: border-box; /* ensure padding doesn't add extra width */
+  }
+  
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+} 

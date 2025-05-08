@@ -1,0 +1,143 @@
+.navbar {
+    background-color: #000;
+    padding: 0.6rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: 3.5rem;
+  }
+  
+  .navbarRight {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .signOutButton {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .signOutButton:hover {
+    background-color: #c82333;
+  }
+  
+  .navbarBrand {
+    color: #ffcc00;
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-decoration: none;
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .navbarBrand:hover {
+    color: #ffed4a;
+  }
+  
+  /* Dropdown styles */
+  .dropdown {
+    position: relative;
+  }
+  
+  .dropdownToggle {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.3rem;
+    cursor: pointer;
+    padding: 0.4rem;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+  }
+  
+  .dropdownToggle:hover {
+    color: #ffcc00;
+  }
+  
+  .menuIcon {
+    display: inline-block;
+    line-height: 1;
+  }
+  
+  .dropdownMenu {
+    position: absolute;
+    top: calc(100% + 0.3rem);
+    right: 0;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+  }
+  
+  .show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  
+  .dropdownItem {
+    display: block;
+    padding: 0.7rem 1.2rem;
+    color: #000;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    text-align: left;
+    width: 100%;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  
+  .dropdownItem:hover {
+    background-color: #f5f5f5;
+    color: #ffcc00;
+  }
+  
+  .signOutBtn {
+    border-top: 1px solid #eee;
+    color: #dc3545;
+  }
+  
+  .signOutBtn:hover {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  @media (max-width: 768px) {
+    .navbar {
+      padding: 0.6rem 1rem;
+      height: 3rem;
+    }
+  
+    .navbarBrand {
+      font-size: 1.2rem;
+    }
+  
+    .dropdownMenu {
+      min-width: 180px;
+    }
+  
+    .signOutButton {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+    }
+  }
+  

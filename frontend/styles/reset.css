@@ -1,0 +1,15 @@
+/* Reset CSS - only focusing on fixing the whitespace issue */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body::before,
+body::after {
+  display: none !important;
+}
+
+/* Remove any margin from direct children of body */
+body > * {
+  margin-top: 0 !important;
+} 

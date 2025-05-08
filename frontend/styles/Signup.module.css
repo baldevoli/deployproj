@@ -1,0 +1,225 @@
+.hideNavbar .navbar {
+    display: none;
+  }
+  
+  .signupContainer.noNavbar {
+    margin-top: 0;
+    min-height: 100vh;
+  }
+  
+  .titleBanner {
+    background-color: #000;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .titleLink {
+    color: #ffcc00;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .titleLink:hover {
+    color: #ffed4a;
+  }
+  
+  .signupContainer {
+    min-height: 100vh;
+    background-color: #f5f5f5;
+  }
+  
+  .signupContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 64px);
+    padding: 20px;
+  }
+  
+  .signupFormContainer {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    border: 2px solid #000;
+  }
+  
+  .signupFormContainer h2 {
+    text-align: center;
+    color: #000;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .signupForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .formGroup label {
+    color: #000;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .formGroup input {
+    padding: 0.8rem;
+    border: 1px solid #000;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  
+  .formGroup input:focus {
+    outline: none;
+    border-color: #ffcc00;
+    box-shadow: 0 0 0 2px rgba(255, 204, 0, 0.2);
+  }
+  
+  .error {
+    border-color: #dc3545 !important;
+  }
+  
+  .error::placeholder {
+    color: #dc3545;
+    opacity: 1;
+  }
+  
+  .errorMessage {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    animation: errorPop 0.3s ease-out;
+    background-color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
+    position: relative;
+  }
+  
+  @keyframes errorPop {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .signupButton {
+    background-color: #ffcc00;
+    color: #000;
+    padding: 0.8rem;
+    border: 1px solid #000;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+  }
+  
+  .signupButton:hover {
+    background-color: #ffed4a;
+    transform: translateY(-2px);
+  }
+  
+  .signupButton:active {
+    transform: scale(0.98);
+  }
+  
+  .signinLink {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #000;
+    font-size: 0.9rem;
+  }
+  
+  .signinLink a {
+    color: #ffcc00;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  
+  .signinLink a:hover {
+    text-decoration: underline;
+  }
+  
+  .successPopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  .successMessage {
+    color: white;
+    font-size: 2rem;
+    font-weight: 500;
+    animation: popIn 0.3s ease-out;
+    text-align: center;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes popIn {
+    0% {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  .formGroup select {
+    padding: 0.8rem;
+    border: 1px solid #000;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  
+  .formGroup select:focus {
+    outline: none;
+    border-color: #ffcc00;
+    box-shadow: 0 0 0 2px rgba(255, 204, 0, 0.2);
+  }
+  
+  .smallText {
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    opacity: 0.8;
+  }
+  
+  
