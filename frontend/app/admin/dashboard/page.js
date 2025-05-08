@@ -78,7 +78,7 @@ export default function AdminDashboard() {
     
     try {
       // Send request to update alert settings
-      const response = await fetch('http://localhost:8080/api/items/update-global-limits', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/items/update-global-limits`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

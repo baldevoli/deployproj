@@ -141,7 +141,7 @@ export default function Inventory() {
         }
 
         // Update item stock in backend
-        const response = await fetch(`http://localhost:8080/api/items/${productId}/update-quantity`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/items/${productId}/update-quantity`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
@@ -156,7 +156,7 @@ export default function Inventory() {
         }
 
         // Record the transaction
-        const transactionResponse = await fetch('http://localhost:8080/api/transactions', {
+        const transactionResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/transactions`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

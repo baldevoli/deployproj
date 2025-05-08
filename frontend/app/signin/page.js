@@ -97,7 +97,7 @@ export default function SignIn() {
     
     try {
       // Fetch user data from the backend API
-      const response = await fetch(`http://localhost:8080/api/users?email=${encodeURIComponent(email)}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users?email=${encodeURIComponent(email)}`);
       
       if (!response.ok) {
         throw new Error('Failed to connect to authentication service');
