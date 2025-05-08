@@ -13,14 +13,12 @@ const allowedOrigins = [
   'https://deployproj.vercel.app',
   'https://deployproj-git-master-baldevoli.vercel.app',
   'https://deployproj-copy-production.up.railway.app',
-  'https://deployproj-production.up.railway.app'
 ];
 
 // CORS middleware with dynamic origin check
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'https://deployproj-production.up.railway.app',
     'https://deployproj-copy-production.up.railway.app'
   ],
   credentials: true
