@@ -19,11 +19,16 @@ app.use(cors({
 app.get('/api/health', async (req, res) => {
   try {
     await testConnection();
-    res.json({ status: 'ok', message: 'Server is running and database is connected' });
+    res.status(200).json({ status: 'ok', message: '✅ Healthcheck OK - Server and database are running' });
   } catch (error) {
     console.error('Health check failed:', error);
     res.status(500).json({ status: 'error', message: error.message });
   }
+});
+
+// Root endpoint
+app.get('/', (req, res) => {
+  res.status(200).send('🎉 API is up and running');
 });
 
 // Import routes
