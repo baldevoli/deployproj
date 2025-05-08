@@ -1,6 +1,13 @@
 const mysql = require('mysql2');
 require('dotenv').config();
 
+// Log database configuration (without password)
+console.log('Database Configuration:');
+console.log('Host:', process.env.DB_HOST);
+console.log('Port:', process.env.DB_PORT);
+console.log('User:', process.env.DB_USER);
+console.log('Database:', process.env.DB_NAME);
+
 // Validate required environment variables
 const requiredEnvVars = ['DB_HOST', 'DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_PORT'];
 const missingEnvVars = requiredEnvVars.filter(varName => !process.env[varName]);
@@ -26,6 +33,8 @@ const pool = mysql.createPool({
 pool.getConnection((err, connection) => {
   if (err) {
     console.error('MySQL connection error:', err);
+    console.error('Error code:', err.code);
+    console.error('Error message:', err.message);
     process.exit(1); // Exit if database connection fails
   }
   console.log('Connected to MySQL successfully');
