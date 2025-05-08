@@ -2,7 +2,7 @@
 const nextConfig = {
   // Enable image optimization
   images: {
-    domains: ['localhost'],
+    domains: ['localhost', 'deployproj-production.up.railway.app'],
   },
 
   // Configure allowed development origins
