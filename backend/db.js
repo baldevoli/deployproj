@@ -10,20 +10,27 @@ if (missingEnvVars.length > 0) {
   process.exit(1);
 }
 
-const db = mysql.createConnection({
+// Create a connection pool instead of a single connection
+const pool = mysql.createPool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
-db.connect((err) => {
+// Test the connection
+pool.getConnection((err, connection) => {
   if (err) {
     console.error('MySQL connection error:', err);
     process.exit(1); // Exit if database connection fails
   }
   console.log('Connected to MySQL successfully');
+  connection.release();
 });
 
-module.exports = db;
+// Export the pool instead of a single connection
+module.exports = pool;

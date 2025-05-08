@@ -44,8 +44,8 @@ console.log('Routes registered successfully');
 // Health check endpoint with database verification
 app.get('/', (req, res) => {
   console.log('Health check hit /');
-  const db = require('./db');
-  db.getConnection((err, connection) => {
+  const pool = require('./db');
+  pool.getConnection((err, connection) => {
     if (err) {
       console.error('Database connection error during health check:', err);
       return res.status(500).json({ error: 'Database connection failed' });
@@ -71,8 +71,8 @@ app.use((req, res) => {
 });
 
 // Test database connection before starting server
-const db = require('./db');
-db.getConnection((err, connection) => {
+const pool = require('./db');
+pool.getConnection((err, connection) => {
   if (err) {
     console.error('Error connecting to the database:', err);
     process.exit(1); // Exit if database connection fails
