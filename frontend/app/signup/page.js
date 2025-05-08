@@ -18,7 +18,8 @@ export default function Signup() {
   
   // State for form data with all required user registration fields
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -26,16 +27,14 @@ export default function Signup() {
   });
 
   // State for validation errors
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState({});
   // State to show success message after successful registration
   const [showSuccess, setShowSuccess] = useState(false);
   // State to store the generated user ID
   const [userId, setUserId] = useState('');
-  // State to handle loading
-  const [loading, setLoading] = useState(false);
 
   // Use environment variable for API URL
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL ;
 
   // Effect to hide navbar on the signup page
   useEffect(() => {
@@ -63,7 +62,8 @@ export default function Signup() {
   const validateForm = () => {
     const newErrors = {};
     // Check required fields
-    if (!formData.name.trim()) newErrors.name = 'Name is required';
+    if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
+    if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
     
     // Email validation
     if (!formData.email.trim()) newErrors.email = 'Email is required';
@@ -85,7 +85,7 @@ export default function Signup() {
     if (!formData.status) newErrors.status = 'Please select a status';
     
     // Update error state
-    setError(Object.values(newErrors).join('\n') || '');
+    setErrors(newErrors);
     // Return true if no errors
     return Object.keys(newErrors).length === 0;
   };
@@ -110,14 +110,12 @@ export default function Signup() {
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-
     if (validateForm()) {
       try {
         // Format the data for the API
         const userData = {
-          name: formData.name,
+          first_name: formData.firstName,
+          last_name: formData.lastName,
           email: formData.email,
           password: formData.password,
           phone: formData.phone || null,  // Include phone in the request
@@ -130,7 +128,7 @@ export default function Signup() {
         console.log('Sending signup data to API:', userData);
         
         // Send data to the backend API
-        const response = await fetch(`${API_URL}/api/auth/signup`, {
+        const response = await fetch(`${API_URL}/api/users/signup`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -145,7 +143,7 @@ export default function Signup() {
         // Handle API error responses
         if (!response.ok) {
           console.error('Server error:', data);
-          throw new Error(data.message || 'Failed to create account');
+          throw new Error(data.error || data.details || 'Failed to create account');
         }
         
         console.log('Signup successful:', data);
