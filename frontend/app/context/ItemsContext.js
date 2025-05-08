@@ -9,10 +9,17 @@ export const ItemsProvider = ({ children }) => {
   const [error, setError] = useState('');
 
   // Use environment variable for API URL
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_URL_DEV;
   
   const fetchItems = async () => {
     try {
+      if (!API_URL) {
+        console.error('API URL is not defined');
+        setError('API URL is not configured');
+        setLoading(false);
+        return;
+      }
+
       console.log('Fetching items from:', `${API_URL}/api/items`);
       
       // Set up request timeout to prevent hanging requests

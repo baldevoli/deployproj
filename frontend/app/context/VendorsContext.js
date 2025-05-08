@@ -13,11 +13,18 @@ export const VendorsProvider = ({ children }) => {
   const [error, setError] = useState('');
 
   // Use environment variable for API URL
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_URL_DEV;
   
   // Fetch vendors data function
   const fetchVendors = async () => {
     try {
+      if (!API_URL) {
+        console.error('API URL is not defined');
+        setError('API URL is not configured');
+        setLoading(false);
+        return;
+      }
+
       console.log('Fetching vendors from:', `${API_URL}/api/vendors`);
       
       // Set up request timeout to prevent hanging requests

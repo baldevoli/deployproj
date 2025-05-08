@@ -9,11 +9,18 @@ export const TypesProvider = ({ children }) => {
   const [error, setError] = useState('');
 
   // Use environment variable for API URL
-  const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_URL_DEV;
   
   useEffect(() => {
     const fetchTypes = async () => {
       try {
+        if (!API_URL) {
+          console.error('API URL is not defined');
+          setError('API URL is not configured');
+          setLoading(false);
+          return;
+        }
+
         console.log('Fetching types from:', `${API_URL}/api/types`);
         
         const controller = new AbortController();
