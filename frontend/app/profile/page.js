@@ -41,7 +41,7 @@ export default function UserProfile() {
             <div className={styles['profile-item']}><strong>Last Name:</strong> {user.last_name}</div>
             <div className={styles['profile-item']}><strong>Email:</strong> {user.email}</div>
             <div className={styles['profile-item']}><strong>Phone:</strong> {user.phone}</div>
-
+            <div className={styles['profile-item']}><strong>Password:</strong>{user.password}</div>
             <div className={styles['profile-item']}><strong>Status:</strong> {user.status}</div>
            
           </div>
