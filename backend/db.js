@@ -9,22 +9,13 @@ console.log('Port:', process.env.DB_PORT);
 console.log('User:', process.env.DB_USER);
 console.log('Database:', process.env.DB_NAME);
 
-// Validate required environment variables
-const requiredEnvVars = ['DB_HOST', 'DB_USER', 'DB_PASSWORD', 'DB_NAME', 'DB_PORT'];
-const missingEnvVars = requiredEnvVars.filter(varName => !process.env[varName]);
-
-if (missingEnvVars.length > 0) {
-  console.error('Missing required environment variables:', missingEnvVars.join(', '));
-  process.exit(1);
-}
-
-// Create a connection pool
+// Create a connection pool with default values
 const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT,
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME || 'deployproj',
+  port: process.env.DB_PORT || 3306,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
@@ -38,7 +29,8 @@ async function testConnection() {
     connection.release();
   } catch (error) {
     console.error('Error connecting to MySQL:', error);
-    process.exit(1);
+    // Don't exit the process, just log the error
+    console.error('Database connection failed, but continuing...');
   }
 }
 
