@@ -205,7 +205,13 @@ export default function AdminVendors() {
       console.log(`Showing items for vendor: ${vendor.vendor_name} (ID: ${vendor.vendor_id})`);
       
       // Fetch items for this vendor
-      const response = await fetch(`${API_URL}/api/vendors/${vendor.vendor_id}/items`);
+      const response = await fetch(`${API_URL}/api/vendors/${vendor.vendor_id}/items`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      });
       
       if (!response.ok) {
         throw new Error('Failed to fetch vendor items');
