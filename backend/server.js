@@ -8,9 +8,13 @@ const PORT = process.env.PORT || 8000;
 // Parse JSON bodies
 app.use(express.json());
 
-// Configure CORS to accept requests from frontend during development
+// Configure CORS using environment variables
+const allowedOrigins = process.env.ALLOWED_ORIGINS 
+  ? process.env.ALLOWED_ORIGINS.split(',')
+  : ['http://localhost:3000', 'http://localhost:3001'];
+
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3000', 'http://127.0.0.1:3001'],
+  origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Role'],
   credentials: true,
@@ -62,10 +66,10 @@ app.use('/api/types', require('./routes/types'));
 
 console.log('Routes registered successfully');
 
-// Health check endpoint
+// Health check endpoint with database verification
 app.get('/', (req, res) => {
   console.log('Health check hit /');
-  // Test database connection
+  const db = require('./db');
   db.getConnection((err, connection) => {
     if (err) {
       console.error('Database connection error during health check:', err);
@@ -111,9 +115,8 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
-const db = require('./db');
-
 // Test database connection before starting server
+const db = require('./db');
 db.getConnection((err, connection) => {
   if (err) {
     console.error('Error connecting to the database:', err);

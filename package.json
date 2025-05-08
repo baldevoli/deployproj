@@ -1,26 +1,8 @@
 {
-  "name": "retriever-essentials",
-  "version": "1.0.0",
-  "description": "Retriever Essentials Inventory Management System",
-  "scripts": {
-    "start": "node backend/server.js",
-    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
-    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
-    "build": "cd frontend && npm run build"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  },
   "dependencies": {
-    "concurrently": "8.2.2",
-    "chalk": "4.1.2",
-    "date-fns": "2.30.0",
-    "lodash": "4.17.21",
-    "rxjs": "7.8.2",
-    "shell-quote": "1.8.2",
-    "spawn-command": "0.0.2",
-    "supports-color": "8.1.1",
-    "tree-kill": "1.2.2",
-    "yargs": "17.7.2"
+    "lucide-react": "^0.503.0",
+    "next": "15.2.4",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
   }
 }

@@ -27,7 +27,7 @@ function Start-FrontendServer {
 
 # Main execution
 Start-BackendServer
-Start-Sleep -Seconds 2  # Give the backend a moment to start the server
+Start-Sleep -Seconds 2  # Give the backend a moment to start
 Start-FrontendServer
 
 Write-Host "Both servers have been started!" -ForegroundColor Green
