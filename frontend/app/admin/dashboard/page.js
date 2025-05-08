@@ -49,19 +49,24 @@ export default function AdminDashboard() {
           throw new Error('API URL is not configured. Please check your environment variables.');
         }
 
+        const headers = {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+        };
+
         // Fetch student counts
-        const studentCountsResponse = await fetch(`${API_URL}/api/transactions/unique-students`);
+        const studentCountsResponse = await fetch(`${API_URL}/api/transactions/unique-students`, { headers });
         if (!studentCountsResponse.ok) {
           throw new Error(`Failed to fetch student counts: ${studentCountsResponse.status}`);
         }
         const studentCountsData = await studentCountsResponse.json();
         setStudentCounts({
-          undergraduate: studentCountsData.undergraduate_count,
-          graduate: studentCountsData.graduate_count
+          undergraduate: studentCountsData.undergraduate_count || 0,
+          graduate: studentCountsData.graduate_count || 0
         });
 
         // Fetch most taken items
-        const transactionsResponse = await fetch(`${API_URL}/api/transactions/most-taken`);
+        const transactionsResponse = await fetch(`${API_URL}/api/transactions/most-taken`, { headers });
         if (!transactionsResponse.ok) {
           throw new Error(`Failed to fetch most taken items: ${transactionsResponse.status}`);
         }
@@ -69,7 +74,7 @@ export default function AdminDashboard() {
         setMostTakenItems(Array.isArray(transactionsData) ? transactionsData : []);
 
         // Fetch low stock items
-        const itemsResponse = await fetch(`${API_URL}/api/items/low-stock?quantity=${alertSettings.quantity}&weight=${alertSettings.weight}`);
+        const itemsResponse = await fetch(`${API_URL}/api/items/low-stock?quantity=${alertSettings.quantity}&weight=${alertSettings.weight}`, { headers });
         if (!itemsResponse.ok) {
           throw new Error(`Failed to fetch low stock items: ${itemsResponse.status}`);
         }
@@ -77,14 +82,16 @@ export default function AdminDashboard() {
         setLowStockItems(Array.isArray(itemsData) ? itemsData : []);
       } catch (err) {
         console.error('Error fetching dashboard data:', err);
-        setError(err.message);
+        setError(err.message || 'Failed to load dashboard data. Please try again later.');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDashboardData();
-  }, [alertSettings]);
+    if (user && user.role === 'admin') {
+      fetchDashboardData();
+    }
+  }, [alertSettings, user]);
 
   const handleAlertSettingsSubmit = async (e) => {
     e.preventDefault();
