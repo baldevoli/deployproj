@@ -1,12 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  allowedDevOrigins: [
-    '192.168.66.1',
-    'localhost',
-    '127.0.0.1',
-    '*.ngrok-free.app',
-    '47d2-2600-4040-b0d2-ee00-253c-b4ab-9699-f224.ngrok-free.app'
-  ],
+  // Enable static exports
+  output: 'export',
+  
+  // Disable server-side image optimization
+  images: {
+    unoptimized: true,
+  },
+  
+  // Configure allowed development origins
   async headers() {
     return [
       {

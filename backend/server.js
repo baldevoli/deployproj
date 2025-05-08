@@ -12,14 +12,11 @@ app.use(express.json());
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'http://localhost:3001',
-    'https://47d2-2600-4040-b0d2-ee00-253c-b4ab-9699-f224.ngrok-free.app'
+    'http://localhost:3001'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Role'],
-  credentials: true,
-  optionsSuccessStatus: 200,
-  preflightContinue: false
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
 
 // Add request logging middleware

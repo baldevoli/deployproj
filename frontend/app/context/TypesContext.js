@@ -9,7 +9,7 @@ export const TypesProvider = ({ children }) => {
   const [error, setError] = useState('');
 
   // Use environment variable for API URL
-  const API_URL = process.env.NEXT_PUBLIC_API_URL_DEV || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
   
   useEffect(() => {
     const fetchTypes = async () => {
