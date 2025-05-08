@@ -9,7 +9,7 @@ export const ItemsProvider = ({ children }) => {
   const [error, setError] = useState('');
 
   // Use environment variable for API URL
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   
   const fetchItems = async () => {
     try {
