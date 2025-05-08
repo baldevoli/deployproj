@@ -11,5 +11,6 @@ router.post('/', authorizeAdmin, controller.create);
 router.put('/:id', authorizeAdmin, controller.update);
 router.delete('/:id', authorizeAdmin, controller.remove);
 router.post('/:id/update-quantity', controller.updateQuantity);
+router.get('/types', controller.getUniqueTypes);
 
 module.exports = router;

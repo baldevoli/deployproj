@@ -21,12 +21,12 @@ export const TypesProvider = ({ children }) => {
           return;
         }
 
-        console.log('Fetching types from:', `${API_URL}/api/types`);
+        console.log('Fetching types from:', `${API_URL}/api/items/types`);
         
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 10000);
         
-        const res = await fetch(`${API_URL}/api/types`, {
+        const res = await fetch(`${API_URL}/api/items/types`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

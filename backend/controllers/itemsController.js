@@ -286,3 +286,15 @@ exports.updateGlobalLimits = async (req, res) => {
     res.status(500).json({ error: 'Failed to update global limits', details: err.message });
   }
 };
+
+exports.getUniqueTypes = async (req, res) => {
+  try {
+    const rows = await db.query('SELECT DISTINCT type FROM items WHERE type IS NOT NULL ORDER BY type');
+    const types = rows.map(row => row.type);
+    console.log(`Retrieved ${types.length} unique types`);
+    res.json(types);
+  } catch (err) {
+    console.error('Error fetching unique types:', err);
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
+};
