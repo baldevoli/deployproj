@@ -287,6 +287,7 @@ exports.updateGlobalLimits = async (req, res) => {
   }
 };
 
+// Get unique types from items
 exports.getUniqueTypes = async (req, res) => {
   try {
     const rows = await db.query('SELECT DISTINCT type FROM items WHERE type IS NOT NULL ORDER BY type');
