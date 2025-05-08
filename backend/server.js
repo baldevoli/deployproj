@@ -8,13 +8,9 @@ const PORT = process.env.PORT || 8000;
 // Parse JSON bodies
 app.use(express.json());
 
-// Configure CORS using environment variables
-const allowedOrigins = process.env.ALLOWED_ORIGINS 
-  ? process.env.ALLOWED_ORIGINS.split(',')
-  : ['http://localhost:3000', 'http://localhost:3001'];
-
+// Configure CORS for development
 app.use(cors({
-  origin: allowedOrigins,
+  origin: ['http://localhost:3000', 'http://localhost:3001'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Role'],
   credentials: true,
@@ -22,30 +18,9 @@ app.use(cors({
   preflightContinue: false
 }));
 
-// Add debug logging middleware
-app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-  console.log('Request headers:', req.headers);
-  console.log('Request body:', req.body);
-  next();
-});
-
 // Add request logging middleware
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-  if (req.method === 'OPTIONS') {
-    console.log('Received OPTIONS request - responding with CORS headers');
-  }
-  next();
-});
-
-// Add response header logging middleware
-app.use((req, res, next) => {
-  const originalSend = res.send;
-  res.send = function(body) {
-    console.log(`Response status for ${req.method} ${req.url}: ${res.statusCode}`);
-    return originalSend.call(this, body);
-  };
   next();
 });
 
@@ -77,26 +52,6 @@ app.get('/', (req, res) => {
     }
     connection.release();
     res.status(200).send('🎉 API is up and running');
-  });
-});
-
-// Add a debug endpoint to test API connectivity
-app.get('/test', (req, res) => {
-  console.log('Test endpoint accessed');
-  res.json({ message: 'API is working properly' });
-});
-
-// Add a specific items test endpoint
-app.get('/test-items', (req, res) => {
-  console.log('Testing items endpoint');
-  const db = require('./db');
-  db.query('SELECT * FROM items LIMIT 5', (err, rows) => {
-    if (err) {
-      console.error('Database error:', err);
-      return res.status(500).json({ error: 'Database error', details: err.message });
-    }
-    console.log('Items returned:', rows.length);
-    res.json(rows);
   });
 });
 
