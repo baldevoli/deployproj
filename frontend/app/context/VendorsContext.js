@@ -12,8 +12,8 @@ export const VendorsProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Backend API URL for accessing vendor data
-  const API_URL = 'http://localhost:8000';
+  // Use environment variable for API URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
   
   // Fetch vendors data function
   const fetchVendors = async () => {
@@ -77,11 +77,17 @@ export const VendorsProvider = ({ children }) => {
 
   // Provide the vendors data, loading state, error, and fetch function to child components
   return (
-    <VendorsContext.Provider value={{ vendors, loading, error, fetchVendors }}>
+    <VendorsContext.Provider value={{ vendors, loading, error, refetch: fetchVendors }}>
       {children}
     </VendorsContext.Provider>
   );
 };
 
-// Custom hook to easily access the vendors context in any component
-export const useVendors = () => useContext(VendorsContext); 
+// Custom hook to use the vendors context
+export const useVendors = () => {
+  const context = useContext(VendorsContext);
+  if (!context) {
+    throw new Error('useVendors must be used within a VendorsProvider');
+  }
+  return context;
+}; 

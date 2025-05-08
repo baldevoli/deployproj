@@ -3,8 +3,14 @@
 import { useState, useEffect } from 'react';
 import Navbar from '@/app/components/Navbar';
 import styles from '@/styles/AdminDashboard.module.css';
+import { useRouter } from 'next/navigation';
+import { useVendors } from '../../context/VendorsContext';
+import { useItems } from '../../context/ItemsContext';
 
 export default function AdminDashboard() {
+  const router = useRouter();
+  const { vendors, loading: vendorsLoading, error: vendorsError } = useVendors();
+  const { items, loading: itemsLoading, error: itemsError } = useItems();
   const [mostTakenItems, setMostTakenItems] = useState([]);
   const [lowStockItems, setLowStockItems] = useState([]);
   const [studentCounts, setStudentCounts] = useState({
@@ -25,7 +31,7 @@ export default function AdminDashboard() {
   });
 
   // Use environment variable for API URL
-  const API_URL = process.env.NEXT_PUBLIC_API_URL_DEV || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -94,26 +100,12 @@ export default function AdminDashboard() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className={styles.pageWrapper}>
-        <Navbar />
-        <main className={styles.dashboardContainer}>
-          <div className={styles.loadingSpinner}>Loading...</div>
-        </main>
-      </div>
-    );
+  if (vendorsLoading || itemsLoading) {
+    return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
   }
 
-  if (error) {
-    return (
-      <div className={styles.pageWrapper}>
-        <Navbar />
-        <main className={styles.dashboardContainer}>
-          <div className={styles.error}>Error: {error}</div>
-        </main>
-      </div>
-    );
+  if (vendorsError || itemsError) {
+    return <div className="text-red-500">Error loading data</div>;
   }
 
   return (

@@ -5,11 +5,13 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 import styles from '../../../styles/AddItem.module.css';
 import Navbar from '../../components/Navbar';
+import { useVendors } from '../../context/VendorsContext';
 
 export default function AdminAddItem() {
   // Initialize router for navigation
   const router = useRouter();
   const { user, isAuthenticated } = useAuth();
+  const { vendors } = useVendors();
   
   // Check if user is admin on component load
   useEffect(() => {
@@ -70,7 +72,6 @@ export default function AdminAddItem() {
   });
 
   // State for vendors list
-  const [vendors, setVendors] = useState([]);
   const [loadingVendors, setLoadingVendors] = useState(true);
 
   // State for error and success messages

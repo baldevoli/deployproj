@@ -33,6 +33,9 @@ export default function Signup() {
   // State to store the generated user ID
   const [userId, setUserId] = useState('');
 
+  // Use environment variable for API URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
   // Effect to hide navbar on the signup page
   useEffect(() => {
     document.body.classList.add('hide-navbar');
@@ -125,7 +128,7 @@ export default function Signup() {
         console.log('Sending signup data to API:', userData);
         
         // Send data to the backend API
-        const response = await fetch('http://localhost:8000/api/users/signup', {
+        const response = await fetch(`${API_URL}/api/users/signup`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

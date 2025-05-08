@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react';
 import Navbar from '@/app/components/Navbar';
 import styles from '@/styles/Limits.module.css';
+import { useRouter } from 'next/navigation';
 
 export default function LimitsPage() {
+  const router = useRouter();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,13 +16,16 @@ export default function LimitsPage() {
   const [showGlobalLimitModal, setShowGlobalLimitModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Use environment variable for API URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
   useEffect(() => {
     fetchItems();
   }, []);
 
   const fetchItems = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/items');
+      const response = await fetch(`${API_URL}/api/items`);
       if (!response.ok) {
         throw new Error('Failed to fetch items');
       }
@@ -35,7 +40,7 @@ export default function LimitsPage() {
 
   const updateItemLimit = async (itemId, newLimits) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/items/${itemId}`, {
+      const response = await fetch(`${API_URL}/api/items/${itemId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -79,7 +84,7 @@ export default function LimitsPage() {
 
       console.log('Sending request to update global limits:', { quantity, weight });
 
-      const response = await fetch('http://localhost:8000/api/items/update-global-limits', {
+      const response = await fetch(`${API_URL}/api/items/update-global-limits`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
