@@ -2,13 +2,7 @@
 const nextConfig = {
   // Enable image optimization
   images: {
-    domains: ['localhost', '47d2-2600-4040-b0d2-ee00-253c-b4ab-9699-f224.ngrok-free.app'],
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**.ngrok-free.app',
-      },
-    ],
+    domains: ['localhost'],
   },
 
   // Configure allowed development origins
