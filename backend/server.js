@@ -9,18 +9,21 @@ const PORT = process.env.PORT || 8000;
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:3001'
-  ],
+  origin: '*',  // Allow all origins in production
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 
 // Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Server is running' });
+app.get('/api/health', async (req, res) => {
+  try {
+    await testConnection();
+    res.json({ status: 'ok', message: 'Server is running and database is connected' });
+  } catch (error) {
+    console.error('Health check failed:', error);
+    res.status(500).json({ status: 'error', message: error.message });
+  }
 });
 
 // Import routes
@@ -46,6 +49,7 @@ async function startServer() {
   try {
     // Test database connection
     await testConnection();
+    console.log('Database connection successful');
     
     // Start listening
     app.listen(PORT, () => {
